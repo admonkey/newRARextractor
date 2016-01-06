@@ -22,6 +22,7 @@ if [ -f "credentials_local.bash" ]; then
   source "credentials_local.bash"
 fi
 
+# validate folders exist
 if [[ ! -d "$watchFolder" ]] || [[ ! -d "$outDir" ]]; then
 	echo "Error: invalid watchFolder or outDir. Check source code. Aborting."
 	exit 1
@@ -42,8 +43,8 @@ for file in $(cat $news); do
 	fi
   done
   if [ $found = 0 ]; then
-    #unrar e -o- $file $outDir
-    echo "$file"
+    unrar e -o- $file $outDir
+    #echo "$file"
   fi
 done
 
