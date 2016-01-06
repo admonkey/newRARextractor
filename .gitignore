@@ -1,0 +1,4 @@
+.extracted.log
+.tempnews.log
+*~
+credentials_local.bash
