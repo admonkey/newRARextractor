@@ -29,11 +29,11 @@ if [[ ! -d "$watchFolder" ]] || [[ ! -d "$outDir" ]]; then
 fi
 
 # search for all rar files
-news=".tempnews.log"
+news="tempnews.log"
 find $watchFolder -iname \*.rar -print > $news
 
 # iterate through list checking for new items
-extracted=".extracted.log"
+extracted="extracted.log"
 for file in $(cat $news); do
   found=0
   for ex in $(cat $extracted); do
