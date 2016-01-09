@@ -3,17 +3,17 @@
 
 # requires unrar
 if ! $(command -v unrar >/dev/null 2>&1); then
-	echo "Error: unrar not installed. Aborting."
-	exit 1
+  echo "Error: unrar not installed. Aborting."
+  exit 1
 fi
 
 # directory variables
-watchFolder=""	# must have trailing slash: "/path/to/watchFolder/"
-outDir=""	# must NOT have trailing slash: "/path/to/outDir"
+watch_directory=""	# must have trailing slash: "/path/to/watch_directory/"
+extract_to_directory=""	# must NOT have trailing slash: "/path/to/extract_to_directory"
 ignore_directory=""
 
 # help: to mount to a samba share or windows network drive:
-# 	sudo mount -t cifs //ip.address.or.servername.com/ShareName /mnt/foldername/
+#   sudo mount -t cifs //ip.address.or.servername.com/ShareName /mnt/foldername/
 
 # move to working directory
 cd $(dirname "${BASH_SOURCE[0]}")
@@ -24,27 +24,27 @@ if [ -f "credentials_local.bash" ]; then
 fi
 
 # validate folders exist
-if [[ ! -d "$watchFolder" ]] || [[ ! -d "$outDir" ]]; then
-	echo "Error: invalid watchFolder or outDir. Check source code. Aborting."
-	exit 1
+if [[ ! -d "$watch_directory" ]] || [[ ! -d "$extract_to_directory" ]]; then
+  echo "Error: invalid watch_directory or extract_to_directory. Check source code. Aborting."
+  exit 1
 fi
 
 # search for all rar files
 news="tempnews.log"
-find $watchFolder -path $ignore_directory -prune -o -iname \*.rar -print > $news
+find $watch_directory -path $ignore_directory -prune -o -iname \*.rar -print > $news
 
 # iterate through list checking for new items
 extracted="extracted.log"
 for file in $(cat $news); do
   found=0
   for ex in $(cat $extracted); do
-	if [ $file == $ex ]; then
-	  found=1
-	  break
-	fi
+    if [ $file == $ex ]; then
+      found=1
+      break
+    fi
   done
   if [ $found = 0 ]; then
-    unrar e -o- $file $outDir
+    unrar e -o- $file $extract_to_directory
     #echo "$file"
   fi
 done
@@ -52,6 +52,5 @@ done
 # make sure tempfile not empty so as to not overwrite
 # extract log in event of connection issues, errors, etc.
 if [ -s $news ]; then
-	mv $news $extracted
+  mv $news $extracted
 fi
-
