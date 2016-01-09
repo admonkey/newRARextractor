@@ -8,8 +8,8 @@ if ! $(command -v unrar >/dev/null 2>&1); then
 fi
 
 # directory variables
-extract_from_directory=""	# must have trailing slash: "/path/to/extract_from_directory/"
-extract_to_directory=""	# must NOT have trailing slash: "/path/to/extract_to_directory"
+extract_from_directory="./"	# must have trailing slash: "/path/to/extract_from_directory/"
+extract_to_directory="./"	# must NOT have trailing slash: "/path/to/extract_to_directory"
 ignore_directory=""
 
 # help: to mount to a samba share or windows network drive:
@@ -29,9 +29,14 @@ if [[ ! -d "$extract_from_directory" ]] || [[ ! -d "$extract_to_directory" ]]; t
   exit 1
 fi
 
+# if ignore directory is not empty, then filter
+if [ -n "$ignore_directory" ]; then
+  ignore_directory="-path $ignore_directory -prune -o"
+fi
+
 # search for all rar files
 news="tempnews.log"
-find $extract_from_directory -path $ignore_directory -prune -o -iname \*.rar -print > $news
+find $extract_from_directory $ignore_directory -iname \*.rar -print > $news
 
 # iterate through list checking for new items
 extracted="extracted.log"
