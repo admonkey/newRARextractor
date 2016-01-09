@@ -10,6 +10,7 @@ fi
 # directory variables
 watchFolder=""	# must have trailing slash: "/path/to/watchFolder/"
 outDir=""	# must NOT have trailing slash: "/path/to/outDir"
+ignore_directory=""
 
 # help: to mount to a samba share or windows network drive:
 # 	sudo mount -t cifs //ip.address.or.servername.com/ShareName /mnt/foldername/
@@ -30,7 +31,7 @@ fi
 
 # search for all rar files
 news="tempnews.log"
-find $watchFolder -iname \*.rar -print > $news
+find $watchFolder -path $ignore_directory -prune -o -iname \*.rar -print > $news
 
 # iterate through list checking for new items
 extracted="extracted.log"
