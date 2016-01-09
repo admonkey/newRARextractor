@@ -8,7 +8,7 @@ if ! $(command -v unrar >/dev/null 2>&1); then
 fi
 
 # directory variables
-watch_directory=""	# must have trailing slash: "/path/to/watch_directory/"
+extract_from_directory=""	# must have trailing slash: "/path/to/extract_from_directory/"
 extract_to_directory=""	# must NOT have trailing slash: "/path/to/extract_to_directory"
 ignore_directory=""
 
@@ -24,14 +24,14 @@ if [ -f "credentials_local.bash" ]; then
 fi
 
 # validate folders exist
-if [[ ! -d "$watch_directory" ]] || [[ ! -d "$extract_to_directory" ]]; then
-  echo "Error: invalid watch_directory or extract_to_directory. Check source code. Aborting."
+if [[ ! -d "$extract_from_directory" ]] || [[ ! -d "$extract_to_directory" ]]; then
+  echo "Error: invalid extract_from_directory or extract_to_directory. Check source code. Aborting."
   exit 1
 fi
 
 # search for all rar files
 news="tempnews.log"
-find $watch_directory -path $ignore_directory -prune -o -iname \*.rar -print > $news
+find $extract_from_directory -path $ignore_directory -prune -o -iname \*.rar -print > $news
 
 # iterate through list checking for new items
 extracted="extracted.log"
