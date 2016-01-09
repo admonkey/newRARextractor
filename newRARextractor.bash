@@ -1,26 +1,22 @@
 #!/bin/bash
 # unrar new files from a watched directory
 
-# requires unrar
-if ! $(command -v unrar >/dev/null 2>&1); then
-  echo "Error: unrar not installed. Aborting."
-  exit 1
-fi
-
 # directory variables
 extract_from_directory="./"	# must have trailing slash: "/path/to/extract_from_directory/"
 extract_to_directory="./"	# must NOT have trailing slash: "/path/to/extract_to_directory"
 ignore_directory=""
 
-# help: to mount to a samba share or windows network drive:
-#   sudo mount -t cifs //ip.address.or.servername.com/ShareName /mnt/foldername/
-
+# optionally store these variables in a separate file
 # move to working directory
 cd $(dirname "${BASH_SOURCE[0]}")
-
-# optionally store these variables in a separate file
 if [ -f "credentials_local.bash" ]; then
   source "credentials_local.bash"
+fi
+
+# requires unrar
+if ! $(command -v unrar >/dev/null 2>&1); then
+  echo "Error: unrar not installed. Aborting."
+  exit 1
 fi
 
 # validate folders exist
